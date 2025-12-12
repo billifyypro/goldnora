@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewellery Retail Pro - GOLD NORA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        /* --- STYLES --- */
+        :root { --primary: #0f172a; --secondary: #334155; --accent: #d97706; --silver: #64748b; --success: #15803d; --danger: #b91c1c; --bg: #f1f5f9; --card-bg: #ffffff; --border: #e2e8f0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--secondary); padding-top: 70px; }
+        
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; height: 65px; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+        .nav-logo { font-size: 20px; font-weight: 700; color: var(--primary); }
+        .live-clock { font-size: 14px; font-weight: 600; color: var(--accent); background: #fffbeb; padding: 5px 12px; border-radius: 20px; border: 1px solid #fcd34d; }
+        .three-dot-btn { background: none; border: none; font-size: 24px; cursor: pointer; padding: 0 10px; color: var(--secondary); }
+        .dropdown-menu { display: none; position: absolute; right: 10px; top: 60px; background: white; width: 200px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); flex-direction: column; border: 1px solid var(--border); overflow: hidden; }
+        .dropdown-menu.show { display: flex; }
+        .dropdown-menu button { padding: 12px; border: none; background: white; text-align: left; border-bottom: 1px solid #eee; cursor: pointer; }
+        .dropdown-menu button:hover { background: #f8fafc; color: var(--accent); }
+
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; padding-bottom: 100px; }
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .section-header { margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        h2 { margin: 0; color: var(--primary); font-size: 1.1rem; font-weight: 700; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-width { grid-column: 1 / -1; }
+        .form-group label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 5px; text-transform: uppercase; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: #f8fafc; box-sizing: border-box;}
+        
+        .table-wrapper { overflow-x: auto; margin-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { background: #f8fafc; padding: 10px; text-align: left; font-size: 12px; color: #475569; font-weight: 700; }
+        td { padding: 8px; border-bottom: 1px solid var(--border); }
+        td input, td select { width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; box-sizing: border-box; }
+        
+        /* Type Select Style */
+        .inp-type { font-weight: bold; }
+        .type-gold { color: #d97706; }
+        .type-silver { color: #64748b; }
+
+        .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .btn-add { background: #f1f5f9; color: var(--primary); width: 100%; border: 1px dashed #cbd5e1; }
+        .btn-del { background: #fee2e2; color: #ef4444; padding: 5px 10px; }
+
+        .settle-box { background: #fffbeb; padding: 15px; border-radius: 8px; border: 1px solid #fcd34d; }
+        .settle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .big-total { font-size: 20px; font-weight: 800; color: var(--primary); }
+
+        /* Kaccha Mode Styles */
+        .kaccha-box { background: #fdf2f8; border: 1px dashed #ec4899; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
+        .kaccha-control { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; cursor: pointer; color: #be185d; font-weight: 600;}
+        
+        .rate-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .rate-inp-label { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-bottom: 3px; display: block;}
+
+        .history-card { background: white; border: 1px solid #eee; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .h-info strong { color: var(--primary); font-size: 15px; }
+        .h-info span { font-size: 12px; color: #777; }
+        .h-actions { display: flex; gap: 8px; }
+        .btn-icon { padding: 8px 12px; border-radius: 6px; font-size: 14px; cursor: pointer; border: none; }
+        .btn-edit { background: var(--secondary); color: white; }
+        .btn-trash { background: var(--danger); color: white; }
+
+        .action-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.05); display: flex; gap: 10px; box-sizing: border-box; z-index: 900; }
+        .btn-primary { background: var(--primary); color: white; flex: 2; font-size: 15px; }
+        .btn-copy { background: #dcfce7; color: #166534; flex: 1; border: 1px solid #86efac; }
+
+        /* PRINT STYLES - MODIFIED FOR NEW REQUIREMENT */
+        #print-area { position: fixed; top: -10000px; left: 0; width: 210mm; min-height: 297mm; background: white; color: #000; font-family: 'Times New Roman', serif; padding: 15mm; box-sizing: border-box; display:flex; flex-direction: column; justify-content: space-between; }
+        .p-content { flex: 1; }
+        
+        /* Updated p-header for logo alignment */
+        .p-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+        .p-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
+        .p-table th { border: 1px solid #000; padding: 6px; background: #f0f0f0; font-weight: bold; text-align: center; }
+        .p-table td { border: 1px solid #000; padding: 6px; vertical-align: middle; }
+        
+        .col-sr { width: 5%; text-align: center; }
+        .col-type { width: 10%; text-align: center; font-weight: bold; }
+        .col-desc { width: 50%; text-align: left; } 
+        .col-wt { width: 15%; text-align: right; }
+        .col-amt { width: 20%; text-align: right; font-weight: bold; }
+
+        .p-totals-table { width: 50%; border-collapse: collapse; font-size: 14px; margin-left: auto; }
+        .p-totals-table td { padding: 4px; text-align: right; }
+        .p-val-box { border: 1px solid #000; font-weight: bold; padding: 2px 5px; display: inline-block; width: 100px; }
+        
+        @media(max-width: 600px) { 
+            .form-grid { grid-template-columns: 1fr; } 
+            .live-clock span { display: none; }
+            .history-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .h-actions { width: 100%; justify-content: flex-end; }
+        }
+    </style>
+</head>
+<body onload="initialize()">
+
+    <nav class="navbar">
+        <div class="nav-logo">💎 Retail Bill (GOLD NORA)</div>
+        <div class="live-clock" id="clockDisplay"><span>📅 --/--/----</span> <span>⏰ --:--</span></div>
+        <div>
+            <button class="three-dot-btn" onclick="toggleMenu()">&#8942;</button>
+            <div class="dropdown-menu" id="mainMenu">
+                <button onclick="switchView('home')">🏠 New Bill</button>
+                <button onclick="switchView('history')">📊 History</button>
+                <button onclick="switchView('settings')">⚙️ Settings</button>
+                <button onclick="resetForm()" style="color:red;">✨ Clear Form</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="view-home" class="view-section active">
+            <div class="card">
+                <div class="section-header"><h2>Customer Details</h2></div>
+                <div class="form-grid">
+                    <div class="form-group"><label>Inv No.</label><input type="text" id="invoiceNo" readonly style="background:#e2e8f0;"></div>
+                    <div class="form-group"><label>Date</label><input type="date" id="billDate"></div>
+                    <div class="form-group full-width"><label>Customer Name *</label><input type="text" id="custName" placeholder="Enter Name (Required)"></div>
+                    <div class="form-group"><label>Mobile</label><input type="number" id="custMobile"></div>
+                    <div class="form-group"><label>City</label><input type="text" id="custAddr"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-header"><h2 style="color:var(--success)">New Items (Sale)</h2></div>
+                <div class="table-wrapper">
+                    <table id="saleTable">
+                        <thead><tr><th width="10%">Type</th><th width="30%">Item</th><th width="15%">Wt (g)</th><th width="10%">Purity%</th><th width="15%">Fine</th><th width="15%">Amount</th><th width="5%"></th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <button class="btn btn-add" onclick="addRow('saleTable')">+ Add Item</button>
+            </div>
+
+            <div class="card">
+                <div class="section-header"><h2 style="color:var(--danger)">Old Gold (Jama)</h2></div>
+                <div class="table-wrapper">
+                    <table id="jamaTable">
+                         <thead><tr><th width="10%">Type</th><th width="30%">Item</th><th width="15%">Wt (g)</th><th width="10%">Purity%</th><th width="15%">Fine</th><th width="15%">Amount</th><th width="5%"></th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <button class="btn btn-add" onclick="addRow('jamaTable')">+ Add Jama</button>
+            </div>
+
+            <div class="card">
+                <div class="section-header"><h2>Settlement</h2></div>
+                
+                <div class="kaccha-box">
+                    <label class="kaccha-control">
+                        <input type="checkbox" id="useKaccha" onchange="toggleKaccha()"> 
+                        <span>Kaccha Gold Mode (Calc Old Gold at Diff Rate)</span>
+                    </label>
+                    
+                    <label class="kaccha-control">
+                        <input type="checkbox" id="useKacchaSilver" onchange="toggleKaccha()"> 
+                        <span>Kaccha Silver Mode (Calc Old Silver at Diff Rate)</span>
+                    </label>
+
+                    <div id="kacchaInputs" style="display:none; margin-top:10px;">
+                        <label class="rate-inp-label" style="color:#b91c1c;">Kaccha Gold Rate (10g)</label>
+                        <input type="number" id="kacchaRate" placeholder="Enter Gold Kaccha Rate" style="border-color:#ec4899; color:#b91c1c; font-weight:bold; margin-bottom: 10px;" oninput="calcAll()">
+                        
+                        <label class="rate-inp-label" style="color:#64748b;">Kaccha Silver Rate (1 Kg)</label>
+                        <input type="number" id="kacchaSilverRate" placeholder="Enter Silver Kaccha Rate (Kg)" style="border-color:#94a3b8; color:#64748b; font-weight:bold;" oninput="calcAll()">
+                    </div>
+                </div>
+
+                <div class="settle-box">
+                    <div class="rate-group">
+                        <div>
+                            <span class="rate-inp-label" style="color:#d97706;">Display Gold Rate (10g)</span>
+                            <input type="number" id="todaysRate" placeholder="Gold Rate (10g)" oninput="calcAll()">
+                        </div>
+                        <div>
+                            <span class="rate-inp-label" style="color:#64748b;">Display Silver Rate (1 Kg)</span>
+                            <input type="number" id="silverRate" placeholder="Silver Rate (Kg)" oninput="calcAll()">
+                        </div>
+                    </div>
+
+                    <div class="settle-row"><span>Net Fine Wt (Shop Only):</span><strong id="valNetFine">0.000 g</strong></div>
+                    
+                    <div class="settle-row" style="border-top:1px dashed #d97706; padding-top:10px;">
+                        <span>Grand Total:</span><span class="big-total" id="valFinalAmt">₹ 0</span>
+                    </div>
+                    
+                    <div class="settle-row"><span>Cash Paid:</span><input type="number" id="cashPaid" placeholder="0" oninput="calcAll()" style="color:green;"></div>
+                    
+                    <div class="settle-row"><span>Balance Due:</span><strong id="valBalance" style="font-size:18px;">₹ 0</strong></div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <label style="font-size:12px; font-weight:bold; color:#666;">📝 Shopkeeper Note:</label>
+                    <input type="text" id="privateNote" placeholder="Private note..." style="width:100%; padding:8px; border:1px solid #ddd; margin-top:5px;">
+                </div>
+            </div>
+            
+            <div style="height: 60px;"></div>
+            <div class="action-bar">
+                <button class="btn btn-copy" onclick="copySummary()">📋 Copy Text</button>
+                <button class="btn btn-primary" onclick="processBill()">✅ Save & Print Retail PDF</button>
+            </div>
+        </div>
+
+        <div id="view-history" class="view-section">
+            <div class="card">
+                <div class="section-header"><h2>📚 Bill History</h2></div>
+                <input type="text" id="searchName" placeholder="Search Customer..." oninput="searchBills()" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
+                <div id="billsList" style="min-height: 100px;"></div>
+                <button class="btn" style="width:100%; margin-top:10px; background:#eee;" onclick="loadSavedBills()">Force Refresh List</button>
+            </div>
+        </div>
+
+        <div id="view-settings" class="view-section">
+            <div class="card">
+                <h2>Settings</h2>
+                <div class="form-group" style="margin-top:10px"><label>Address</label><input type="text" id="shopAddr"></div>
+                <button class="btn btn-primary" onclick="saveSettings()" style="width:100%; margin-top:15px">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="print-area">
+        <div class="p-content">
+            <div class="p-header">
+                <div>
+                    <div id="p-shopName" style="font-size:24px; font-weight:bold; text-transform:uppercase;">GOLD NORA</div>
+                    <div id="p-shopAddr">Address</div>
+                </div>
+                <div style="text-align:right;">
+                    <img src="https://ik.imagekit.io/85dkxscc2/1000995524-removebg-preview.png" alt="Shop Logo" style="height: 85px; width: 85px; border-radius: 50%; object-fit: cover;">
+                </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px; border:1px solid #000; padding:10px;">
+                <div style="font-size:14px;"><strong>Billed To:</strong><br><span id="p-custName"></span><br><span id="p-custMobile"></span><br><span id="p-custAddr"></span></div>
+                <div style="font-size:14px; text-align:right;"><strong>Inv: </strong> <span id="p-invNo"></span><br><strong>Date: </strong> <span id="p-date"></span></div>
+            </div>
+            
+            <table class="p-table">
+                <thead>
+                    <tr>
+                        <th class="col-sr">Sr.</th>
+                        <th class="col-type">Type</th>
+                        <th class="col-desc">Description</th>
+                        <th class="col-wt">Gross Wt</th>
+                        <th class="col-amt">Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="p-saleBody"></tbody>
+            </table>
+
+            <div id="p-jamaSection" style="display:none; margin-top:10px;">
+                <strong>Returned Items (Old Gold)</strong>
+                <table class="p-table"><tbody id="p-jamaBody"></tbody></table>
+            </div>
+
+            <div style="margin-top:20px;">
+                <table class="p-totals-table">
+                    <tr><td>Total Sale Amount:</td><td><span id="p-valSaleTotal"></span></td></tr>
+                    <tr id="p-rowJamaAmt" style="display:none; color:#b91c1c;"><td>Less: Old Gold Returns:</td><td><span id="p-valJamaTotal"></span></td></tr>
+                    
+                    <tr><td colspan="2"><hr></td></tr>
+                    
+                    <tr><td><strong>Grand Total:</strong></td><td><span id="p-valGrand" class="p-val-box"></span></td></tr>
+                    <tr><td>Less Paid:</td><td><span id="p-valPaid"></span></td></tr>
+                    <tr><td><strong>Balance Due:</strong></td><td><span id="p-valBalance" class="p-val-box" style="border-color:red; color:red;"></span></td></tr>
+                    
+                    <tr>
+                        <td colspan="2" style="text-align:right; font-size:11px; padding-top:8px; color:#444;">
+                            Current Rates: <span id="p-valRateG"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="rate-footer"></div>
+    </div>
+
+    <script>
+        // --- CORE & SETUP ---
+        function initialize() {
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('clockDisplay').innerHTML = `<span>📅 ${now.toLocaleDateString()}</span> <span>⏰ ${now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>`;
+            }, 1000);
+            
+            // Removed Shop Name Loading
+            document.getElementById('shopAddr').value = localStorage.getItem('jewelleryShopAddr') || '';
+            resetForm();
+            loadSavedBills();
+        }
+
+        function toggleMenu() { document.getElementById('mainMenu').classList.toggle('show'); }
+        function switchView(v) { 
+            document.querySelectorAll('.view-section').forEach(e => e.classList.remove('active'));
+            document.getElementById('view-'+v).classList.add('active');
+            toggleMenu();
+            if(v==='history') loadSavedBills();
+        }
+
+        function saveSettings() {
+            // Removed Shop Name Saving
+            localStorage.setItem('jewelleryShopAddr', document.getElementById('shopAddr').value);
+            alert("Settings Saved!"); switchView('home');
+        }
+
+        // UPDATED TOGGLE KACCHA FUNCTION
+        function toggleKaccha() {
+            const isKacchaGold = document.getElementById('useKaccha').checked;
+            const isKacchaSilver = document.getElementById('useKacchaSilver').checked;
+
+            const kacchaInputs = document.getElementById('kacchaInputs');
+            
+            // Show the whole input box if either mode is checked
+            kacchaInputs.style.display = (isKacchaGold || isKacchaSilver) ? 'block' : 'none';
+            calcAll();
+        }
+
+        // --- FORM & CALCULATION ---
+        function resetForm() {
+            document.getElementById('billDate').value = new Date().toISOString().split("T")[0];
+            document.getElementById('invoiceNo').value = "INV-" + Date.now().toString().slice(-6);
+            ['custName','custMobile','custAddr','todaysRate','silverRate','kacchaRate','kacchaSilverRate','cashPaid','privateNote'].forEach(i => document.getElementById(i).value = '');
+            document.getElementById('useKaccha').checked = false;
+            document.getElementById('useKacchaSilver').checked = false; 
+            toggleKaccha();
+            
+            document.querySelector('#saleTable tbody').innerHTML = '';
+            document.querySelector('#jamaTable tbody').innerHTML = '';
+            addRow('saleTable');
+            calcAll();
+        }
+
+        function addRow(tid) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>
+                                <select class="inp-type" onchange="colorType(this); calcAll()">
+                                    <option value="G">Gold</option>
+                                    <option value="S">Silver</option>
+                                </select>
+                            </td>
+                            <td><input type="text" class="inp-name" placeholder="Item"></td>
+                            <td><input type="number" class="inp-wt" placeholder="Wt" oninput="calcAll()"></td>
+                            <td><input type="number" class="inp-pur" placeholder="%" oninput="calcAll()"></td>
+                            <td><input type="text" class="out-fine" readonly value="0.000" tabindex="-1" style="background:#eee"></td>
+                            <td><input type="text" class="out-amt" readonly value="0" tabindex="-1" style="background:#eee; font-weight:bold;"></td>
+                            <td><button class="btn-del" onclick="delRow(this)">×</button></td>`;
+            document.querySelector(`#${tid} tbody`).appendChild(tr);
+            colorType(tr.querySelector('select'));
+        }
+        function delRow(btn) { btn.closest('tr').remove(); calcAll(); }
+        function colorType(sel) {
+            sel.className = 'inp-type ' + (sel.value === 'G' ? 'type-gold' : 'type-silver');
+        }
+        
+        // --- UPDATED CALCULATION LOGIC ---
+        function calcAll() {
+            // 1. Get Rates
+            const displayRateRaw = parseFloat(document.getElementById('todaysRate').value) || 0; // Gold (10g)
+            const kacchaRateRaw = parseFloat(document.getElementById('kacchaRate').value) || 0; // Gold Kaccha (10g)
+            
+            const silverRateRaw = parseFloat(document.getElementById('silverRate').value) || 0; // Silver (1 Kg)
+            const kacchaSilverRateRaw = parseFloat(document.getElementById('kacchaSilverRate').value) || 0; // Silver Kaccha (1 Kg)
+
+            const displayRatePerGm = displayRateRaw / 10;
+            const kacchaRatePerGm = kacchaRateRaw / 10;
+            
+            // Conversion to Per Gram Rate (1 Kg = 1000g)
+            const displaySilverRatePerGm = silverRateRaw / 1000; 
+            const kacchaSilverRatePerGm = kacchaSilverRateRaw / 1000; 
+
+            // Check Kaccha Mode states
+            const useKacchaGold = document.getElementById('useKaccha').checked;
+            const useKacchaSilver = document.getElementById('useKacchaSilver').checked;
+            
+            // Determine the rate to use for Jama items
+            const jamaGoldRateToUse = (useKacchaGold && kacchaRateRaw > 0) ? kacchaRatePerGm : displayRatePerGm;
+            const jamaSilverRateToUse = (useKacchaSilver && kacchaSilverRateRaw > 0) ? kacchaSilverRatePerGm : displaySilverRatePerGm;
+
+            
+            const processTable = (tid, goldRateForThisTable) => {
+                let fineSum = 0;
+                let amtSum = 0;
+                document.querySelectorAll(`#${tid} tbody tr`).forEach(row => {
+                    const type = row.querySelector('.inp-type').value; // 'G' or 'S'
+                    const wt = parseFloat(row.querySelector('.inp-wt').value) || 0;
+                    const pur = parseFloat(row.querySelector('.inp-pur').value) || 0;
+                    
+                    const fine = wt * (pur / 100);
+                    row.querySelector('.out-fine').value = fine.toFixed(3);
+                    
+                    let currentRate = 0;
+                    if (type === 'G') {
+                        // Gold: Use the specific Gold rate passed (Display for Sale, Kaccha for Jama)
+                        currentRate = goldRateForThisTable;
+                    } else if (type === 'S') {
+                        // Silver: Sale uses Display Silver Rate. Jama uses Jama Silver Rate (Kaccha or Display)
+                        currentRate = (tid === 'saleTable') ? displaySilverRatePerGm : jamaSilverRateToUse;
+                    }
+                    
+                    const amt = Math.round(fine * currentRate);
+                    row.querySelector('.out-amt').value = amt;
+                    
+                    fineSum += fine;
+                    amtSum += amt;
+                });
+                return { fine: fineSum, amt: amtSum };
+            };
+
+            // Calculate SALE with Display Rates
+            const sale = processTable('saleTable', displayRatePerGm);
+            
+            // Calculate JAMA with Specific Jama Rates (Kaccha/Display)
+            const jama = processTable('jamaTable', jamaGoldRateToUse);
+
+            const netFine = sale.fine - jama.fine;
+            const netAmt = sale.amt - jama.amt;
+
+            const paid = Math.round(parseFloat(document.getElementById('cashPaid').value)||0);
+            const balance = netAmt - paid;
+            
+            document.getElementById('valNetFine').innerText = netFine.toFixed(3) + " g";
+            document.getElementById('valFinalAmt').innerText = "₹ " + netAmt.toLocaleString('en-IN', {maximumFractionDigits: 0});
+            document.getElementById('valBalance').innerText = "₹ " + balance.toLocaleString('en-IN', {maximumFractionDigits: 0});
+        }
+
+        function copySummary() {
+            const txt = `Bill: ${document.getElementById('valFinalAmt').innerText}\nDue: ${document.getElementById('valBalance').innerText}\nThanks!`;
+            navigator.clipboard.writeText(txt).then(() => alert("Copied!"));
+        }
+
+        // --- PROCESS BILL & PRINT ---
+        function getBillData() {
+            const getItems = (tid) => Array.from(document.querySelectorAll(`#${tid} tbody tr`)).map(r => ({
+                type: r.querySelector('.inp-type').value,
+                name: r.querySelector('.inp-name').value,
+                wt: r.querySelector('.inp-wt').value,
+                pur: r.querySelector('.inp-pur').value,
+                fine: r.querySelector('.out-fine').value,
+                amt: r.querySelector('.out-amt').value
+            })).filter(i=>i.wt);
+
+            const sumAmt = (arr) => arr.reduce((a, b) => a + (parseFloat(b.amt)||0), 0);
+            const saleItems = getItems('saleTable');
+            const jamaItems = getItems('jamaTable');
+
+            return {
+                id: Date.now() + Math.random().toString(),
+                inv: document.getElementById('invoiceNo').value,
+                date: document.getElementById('billDate').value,
+                cust: document.getElementById('custName').value,
+                mob: document.getElementById('custMobile').value,
+                addr: document.getElementById('custAddr').value,
+                note: document.getElementById('privateNote').value,
+                rateG: document.getElementById('todaysRate').value,
+                rateS: document.getElementById('silverRate').value,
+                rateK: document.getElementById('kacchaRate').value,
+                rateSK: document.getElementById('kacchaSilverRate').value, 
+                useK: document.getElementById('useKaccha').checked,
+                useSK: document.getElementById('useKacchaSilver').checked,
+                
+                paid: document.getElementById('cashPaid').value,
+                sale: saleItems,
+                jama: jamaItems,
+                totalSale: sumAmt(saleItems),
+                totalJama: sumAmt(jamaItems),
+                netTotal: sumAmt(saleItems) - sumAmt(jamaItems),
+                
+                totalStr: document.getElementById('valFinalAmt').innerText,
+                balStr: document.getElementById('valBalance').innerText
+            };
+        }
+
+        async function processBill() {
+            const data = getBillData();
+            if(!data.cust) { alert("Enter Customer Name!"); return; }
+
+            // 1. SAVE
+            try {
+                let bills = JSON.parse(localStorage.getItem('jewelleryBills') || '[]');
+                bills.unshift(data);
+                localStorage.setItem('jewelleryBills', JSON.stringify(bills));
+                loadSavedBills(); 
+            } catch(e) {
+                alert("History Save Error: " + e.message); return;
+            }
+
+            // 2. PREPARE PRINT AREA
+            try {
+                // Shop Name is Hardcoded in HTML now, so we only set Address
+                document.getElementById('p-shopAddr').innerText = document.getElementById('shopAddr').value || '';
+                
+                ['custName','custMobile','custAddr','invNo','date'].forEach(k => document.getElementById('p-'+k).innerText = data[k==='invNo'?'inv':(k==='date'?'date':k==='custName'?'cust':k==='custMobile'?'mob':'addr')]);
+
+                const fill = (id, list) => {
+                    const el = document.getElementById(id); el.innerHTML='';
+                    list.forEach((i, x) => el.innerHTML+=`<tr><td class="col-sr">${x+1}</td><td class="col-type">${i.type}</td><td class="col-desc">${i.name}</td><td class="col-wt">${i.wt}</td><td class="col-amt">${i.amt}</td></tr>`);
+                };
+                fill('p-saleBody', data.sale); fill('p-jamaBody', data.jama);
+                
+                document.getElementById('p-jamaSection').style.display = data.jama.length ? 'block' : 'none';
+
+                // --- RATE DISPLAY ---
+                let rateText = `Gold (10g): ₹ ${data.rateG}`;
+                if(data.rateS) {
+                    rateText += ` | Silver (1 Kg): ₹ ${data.rateS}`;
+                }
+                document.getElementById('p-valRateG').innerText = rateText; 
+
+                // --- TOTALS LOGIC ---
+                document.getElementById('p-valSaleTotal').innerText = "₹ " + data.totalSale.toLocaleString('en-IN');
+                
+                if(data.totalJama > 0) {
+                    document.getElementById('p-rowJamaAmt').style.display = 'table-row';
+                    document.getElementById('p-valJamaTotal').innerText = "- ₹ " + data.totalJama.toLocaleString('en-IN');
+                } else {
+                    document.getElementById('p-rowJamaAmt').style.display = 'none';
+                }
+
+                document.getElementById('p-valGrand').innerText = "₹ " + data.netTotal.toLocaleString('en-IN');
+                document.getElementById('p-valPaid').innerText = "₹ " + Math.round(parseFloat(data.paid||0)).toLocaleString('en-IN');
+                document.getElementById('p-valBalance').innerText = data.balStr;
+
+                // --- PDF GENERATION ---
+                const printArea = document.getElementById('print-area');
+                const images = printArea.getElementsByTagName('img');
+                await Promise.all(Array.from(images).map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => { img.onload = img.onerror = resolve; });
+                }));
+
+                printArea.style.position = 'static';
+                const canvas = await html2canvas(printArea, {
+                    scale: 3, 
+                    useCORS: true,
+                    logging: false
+                });
+                
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                const pdfWidth = 210; 
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                
+                const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save(data.cust + "_" + data.inv + ".pdf");
+                
+                printArea.style.position = 'fixed';
+                
+                alert("Bill Saved & Downloaded!");
+                resetForm();
+
+            } catch(err) {
+                console.error("PDF Generation Error:", err);
+                alert("Saved to History, but PDF failed. Check console for details.");
+                document.getElementById('print-area').style.position = 'fixed'; 
+                resetForm();
+            }
+        }
+
+        // --- HISTORY ---
+        function loadSavedBills(query = '') {
+            try {
+                const bills = JSON.parse(localStorage.getItem('jewelleryBills') || '[]');
+                const list = document.getElementById('billsList');
+                list.innerHTML = '';
+                const filtered = bills.filter(b => (b.cust||'').toLowerCase().includes(query.toLowerCase()) || (b.inv||'').toLowerCase().includes(query.toLowerCase()));
+
+                if (filtered.length === 0) { list.innerHTML = '<div style="text-align:center; padding:20px; color:#999">No bills found.</div>'; return; }
+
+                filtered.forEach(b => {
+                    const div = document.createElement('div');
+                    div.className = 'history-card';
+                    div.innerHTML = `
+                        <div class="h-info"><strong>${b.cust}</strong><br><span>${b.date} | ${b.inv}</span><br><span style="color:${(b.balStr||'').includes('-')?'green':'red'}">Due: ${b.balStr}</span></div>
+                        <div class="h-actions"><button class="btn-icon btn-edit" onclick="editBill('${b.id}')">✏️</button><button class="btn-icon btn-trash" onclick="deleteBill('${b.id}')">🗑️</button></div>
+                    `;
+                    list.appendChild(div);
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        function searchBills() { loadSavedBills(document.getElementById('searchName').value); }
+        
+        function deleteBill(id) {
+            if(confirm("Delete this bill?")) {
+                let bills = JSON.parse(localStorage.getItem('jewelleryBills') || '[]');
+                bills = bills.filter(b => b.id != id);
+                localStorage.setItem('jewelleryBills', JSON.stringify(bills));
+                loadSavedBills(document.getElementById('searchName').value);
+            }
+        }
+
+        function editBill(id) {
+            const bills = JSON.parse(localStorage.getItem('jewelleryBills') || '[]');
+            const bill = bills.find(b => b.id == id);
+            if(bill && confirm("Edit this bill?")) {
+                document.getElementById('invoiceNo').value = bill.inv;
+                document.getElementById('billDate').value = bill.date;
+                document.getElementById('custName').value = bill.cust;
+                document.getElementById('custMobile').value = bill.mob;
+                document.getElementById('custAddr').value = bill.addr;
+                
+                document.getElementById('todaysRate').value = bill.rateG || '';
+                document.getElementById('silverRate').value = bill.rateS || '';
+                
+                document.getElementById('useKaccha').checked = bill.useK || false;
+                document.getElementById('kacchaRate').value = bill.rateK || '';
+                
+                document.getElementById('useKacchaSilver').checked = bill.useSK || false; 
+                document.getElementById('kacchaSilverRate').value = bill.rateSK || ''; 
+                
+                toggleKaccha(); 
+
+                document.getElementById('cashPaid').value = bill.paid;
+                document.getElementById('privateNote').value = bill.note || '';
+
+                const loadTable = (tid, items) => {
+                    const tb = document.querySelector(`#${tid} tbody`); tb.innerHTML='';
+                    if(items && items.length) items.forEach(i => { 
+                        addRow(tid); 
+                        const r = tb.lastElementChild; 
+                        r.querySelector('.inp-type').value=i.type || 'G'; 
+                        colorType(r.querySelector('.inp-type'));
+                        r.querySelector('.inp-name').value=i.name; 
+                        r.querySelector('.inp-wt').value=i.wt; 
+                        r.querySelector('.inp-pur').value=i.pur; 
+                        r.querySelector('.out-fine').value=i.fine; 
+                    });
+                    else addRow(tid);
+                };
+                loadTable('saleTable', bill.sale); loadTable('jamaTable', bill.jama);
+                calcAll(); switchView('home');
+            }
+        }
+    </script>
+</body>
+</html>
