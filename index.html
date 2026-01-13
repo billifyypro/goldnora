@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jewellery Retail Pro - GOLD NORA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -13,52 +13,77 @@
         /* --- STYLES --- */
         :root { --primary: #0f172a; --secondary: #334155; --accent: #d97706; --silver: #64748b; --success: #15803d; --danger: #b91c1c; --bg: #f1f5f9; --card-bg: #ffffff; --border: #e2e8f0; }
         
-        /* BRAND COLORS */
-        :root { --brand-blue: #02044A; --brand-gold: #FFD700; --brand-white: #ffffff; }
+        /* BRAND COLORS - UPDATED FOR WHITE HEADER */
+        :root { --brand-blue: #ffffff; --brand-gold: #000000; --brand-white: #000000; }
 
         body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--secondary); padding-top: 100px; }
         
-        /* UPDATED NAVBAR FOR BRANDING */
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; height: auto; min-height: 85px; background: var(--brand-blue); border-bottom: 2px solid var(--brand-gold); display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; box-sizing: border-box; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        /* UPDATED NAVBAR: WHITE BG, NO SHADOW, BORDER ONLY */
+        .navbar { 
+            position: fixed; top: 0; left: 0; width: 100%; height: auto; min-height: 85px; 
+            background: #ffffff; 
+            border-bottom: 1px solid #e2e8f0; 
+            display: flex; align-items: center; justify-content: space-between; 
+            /* CHANGE: Reduced side padding to 15px for screen corner alignment */
+            padding: 10px 15px; box-sizing: border-box; z-index: 1000; 
+            box-shadow: none; 
+        }
         
-        /* NEW BRAND LOGO STYLING */
+        /* CHANGE 1: LEFT ALIGNMENT ENFORCED */
         .brand-container {
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: flex-start; /* STRICT LEFT ALIGNMENT */
+            text-align: left; 
+            margin-right: auto; /* Force push to Left Edge */
         }
         .nav-logo { 
-            font-family: 'Playfair Display', serif; 
-            font-size: 26px; 
-            font-weight: 800; 
-            color: var(--brand-white); 
+            font-family: 'Inter', sans-serif; 
+            font-size: 28px; 
+            font-weight: 300; 
+            color: #000000; 
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             line-height: 1;
             margin-bottom: 4px;
         }
         .nav-sub-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 14px;
-            color: var(--brand-gold);
-            letter-spacing: 4px;
+            font-family: 'Inter', sans-serif; 
+            font-size: 13px;
+            font-weight: 400;
+            color: #000000;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 4px;
-            border-bottom: 1px solid rgba(255,215,0,0.3);
-            padding-bottom: 2px;
+            margin-bottom: 0;
+            border-top: 1px solid #000; 
+            border-bottom: 1px solid #000;
+            padding: 2px 0;
             display: inline-block;
             width: fit-content;
         }
+        
+        /* CHANGE 2: RIGHT ALIGNMENT ENFORCED */
         .nav-details {
             font-family: 'Inter', sans-serif;
-            font-size: 10px;
-            color: #cbd5e1;
-            line-height: 1.2;
+            font-size: 11px;
+            color: #334155;
+            line-height: 1.4;
+            text-align: right; /* STRICT RIGHT ALIGNMENT */
+            margin-bottom: 5px;
         }
 
-        .live-clock { font-size: 12px; font-weight: 600; color: var(--brand-blue); background: #fffbeb; padding: 5px 10px; border-radius: 4px; border: 1px solid #fcd34d; margin-right: 10px;}
-        .three-dot-btn { background: none; border: none; font-size: 28px; cursor: pointer; padding: 0 10px; color: var(--brand-gold); }
+        .live-clock { font-size: 11px; font-weight: 500; color: #333; background: #f1f5f9; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0; margin-right: 10px;}
+        .three-dot-btn { background: none; border: none; font-size: 24px; cursor: pointer; padding: 0 10px; color: #333; }
         
+        .btn-logout {
+            background: none; border: none; 
+            font-size: 11px; font-weight: 600; 
+            color: #b91c1c; cursor: pointer; 
+            text-transform: uppercase; letter-spacing: 0.5px;
+            margin-left: 10px;
+        }
+
         .dropdown-menu { display: none; position: absolute; right: 10px; top: 80px; background: white; width: 200px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); flex-direction: column; border: 1px solid var(--border); overflow: hidden; }
         .dropdown-menu.show { display: flex; }
         .dropdown-menu button { padding: 12px; border: none; background: white; text-align: left; border-bottom: 1px solid #eee; cursor: pointer; }
@@ -69,89 +94,88 @@
         .view-section.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); }
-        .section-header { margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
-        h2 { margin: 0; color: var(--primary); font-size: 1.1rem; font-weight: 700; }
+        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); padding: 15px; margin-bottom: 15px; border: 1px solid var(--border); }
+        .section-header { margin-bottom: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
+        h2 { margin: 0; color: var(--primary); font-size: 1rem; font-weight: 600; }
 
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .full-width { grid-column: 1 / -1; }
-        .form-group label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 5px; text-transform: uppercase; }
-        .form-group input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: #f8fafc; box-sizing: border-box;}
+        .form-group label { display: block; font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+        .form-group input { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; background: #f8fafc; box-sizing: border-box;}
         
         .table-wrapper { overflow-x: auto; margin-bottom: 10px; }
         table { width: 100%; border-collapse: collapse; min-width: 700px; }
-        th { background: #f8fafc; padding: 10px; text-align: left; font-size: 12px; color: #475569; font-weight: 700; }
-        td { padding: 8px; border-bottom: 1px solid var(--border); }
-        td input, td select { width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; box-sizing: border-box; }
         
-        /* Type Select Style */
+        th { background: #f8fafc; padding: 8px; text-align: left; font-size: 11px; color: #475569; font-weight: 700; }
+        td { padding: 6px; border-bottom: 1px solid var(--border); font-size: 12px; }
+        td input, td select { width: 100%; padding: 6px; border: 1px solid #e2e8f0; border-radius: 4px; box-sizing: border-box; font-size: 12px; }
+        
         .inp-type { font-weight: bold; }
         .type-gold { color: #d97706; }
         .type-silver { color: #64748b; }
 
         .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
-        .btn-add { background: #f1f5f9; color: var(--primary); width: 100%; border: 1px dashed #cbd5e1; }
-        .btn-del { background: #fee2e2; color: #ef4444; padding: 5px 10px; }
+        .btn-add { background: #f1f5f9; color: var(--primary); width: 100%; border: 1px dashed #cbd5e1; font-size: 12px; padding: 8px; }
+        .btn-del { background: #fee2e2; color: #ef4444; padding: 4px 8px; font-size: 12px; }
 
-        .settle-box { background: #fffbeb; padding: 15px; border-radius: 8px; border: 1px solid #fcd34d; }
-        .settle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .big-total { font-size: 20px; font-weight: 800; color: var(--primary); }
+        .settle-box { background: #fffbeb; padding: 12px; border-radius: 8px; border: 1px solid #fcd34d; }
+        .settle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; }
+        .big-total { font-size: 18px; font-weight: 700; color: var(--primary); }
 
-        /* Kaccha Mode Styles */
         .kaccha-box { background: #fdf2f8; border: 1px dashed #ec4899; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
-        .kaccha-control { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; cursor: pointer; color: #be185d; font-weight: 600;}
+        .kaccha-control { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; cursor: pointer; color: #be185d; font-weight: 600; font-size: 12px;}
         
         .rate-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .rate-inp-label { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-bottom: 3px; display: block;}
+        .rate-inp-label { font-size: 9px; font-weight: bold; text-transform: uppercase; margin-bottom: 3px; display: block;}
 
-        .history-card { background: white; border: 1px solid #eee; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .h-info strong { color: var(--primary); font-size: 15px; }
-        .h-info span { font-size: 12px; color: #777; }
+        .history-card { background: white; border: 1px solid #eee; padding: 12px; margin-bottom: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .h-info strong { color: var(--primary); font-size: 13px; }
+        .h-info span { font-size: 11px; color: #777; }
         .h-actions { display: flex; gap: 8px; }
-        .btn-icon { padding: 8px 12px; border-radius: 6px; font-size: 14px; cursor: pointer; border: none; }
+        .btn-icon { padding: 6px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; border: none; }
         .btn-edit { background: var(--secondary); color: white; }
         .btn-trash { background: var(--danger); color: white; }
 
         .action-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.05); display: flex; gap: 10px; box-sizing: border-box; z-index: 900; }
-        .btn-primary { background: var(--primary); color: white; flex: 2; font-size: 15px; }
-        .btn-copy { background: #dcfce7; color: #166534; flex: 1; border: 1px solid #86efac; }
+        .btn-primary { background: var(--primary); color: white; flex: 2; font-size: 14px; }
+        .btn-copy { background: #dcfce7; color: #166534; flex: 1; border: 1px solid #86efac; font-size: 14px; }
 
-        /* PRINT STYLES - MODIFIED FOR BRANDING */
+        /* PRINT STYLES */
         #print-area { position: fixed; top: -10000px; left: 0; width: 210mm; min-height: 297mm; background: white; color: #000; font-family: 'Times New Roman', serif; padding: 15mm; box-sizing: border-box; display:flex; flex-direction: column; justify-content: space-between; }
         .p-content { flex: 1; }
         
-        /* BRANDED HEADER FOR PRINT */
         .p-brand-box {
-            background-color: var(--brand-blue);
-            color: white;
+            background-color: #fff; 
+            color: #000;
             padding: 20px;
-            border-radius: 8px;
+            border-bottom: 2px solid #000;
             text-align: center;
             margin-bottom: 25px;
-            border: 2px solid var(--brand-gold);
+            border: none;
         }
         .p-shop-title {
-            font-family: 'Playfair Display', serif !important;
+            font-family: 'Inter', sans-serif !important; 
             font-size: 32px;
-            font-weight: 800;
-            color: var(--brand-white);
+            font-weight: 300;
+            color: #000;
             letter-spacing: 2px;
             text-transform: uppercase;
             line-height: 1;
         }
         .p-shop-sub {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Inter', sans-serif;
             font-size: 16px;
             letter-spacing: 5px;
-            color: var(--brand-gold);
+            color: #000;
             margin: 5px 0 10px 0;
             text-transform: uppercase;
+            border-top:1px solid #000; border-bottom:1px solid #000;
+            display:inline-block;
         }
         .p-shop-details {
             font-family: 'Inter', sans-serif;
             font-size: 12px;
-            color: #e2e8f0;
-            border-top: 1px solid rgba(255,215,0,0.4);
+            color: #333;
             padding-top: 8px;
             display: inline-block;
             width: 80%;
@@ -193,7 +217,7 @@
             box-sizing: border-box;
         }
         .verify-btn {
-            background: var(--brand-blue); color: white;
+            background: var(--primary); color: white;
             padding: 15px; width: 100%; border: none; border-radius: 8px;
             font-weight: bold; font-size: 16px; cursor: pointer;
             transition: 0.2s;
@@ -201,16 +225,16 @@
         .verify-btn:hover { background: #1e3a8a; }
         .error-msg { color: #dc2626; font-weight: bold; margin-top: 15px; display: none; }
         
-        #app-content { display: none; } /* Hidden until verified */
+        #app-content { display: none; } 
 
         @media(max-width: 600px) { 
             body { padding-top: 130px; }
-            .navbar { flex-direction: column; align-items: center; padding: 10px; }
-            .brand-container { text-align: center; margin-bottom: 10px; }
+            .navbar { flex-direction: column; align-items: flex-start; padding: 15px; }
+            .brand-container { text-align: left; margin-bottom: 10px; width: 100%; }
+            .nav-details { text-align: left; width: 100%; margin-bottom: 10px; }
             .nav-logo { font-size: 24px; }
-            .nav-details { display: block; font-size: 9px; }
-            .live-clock { margin: 0 0 10px 0; font-size: 11px; }
-            .dropdown-menu { top: 120px; }
+            
+            .dropdown-menu { top: 130px; }
             
             .form-grid { grid-template-columns: 1fr; } 
             .live-clock span { display: inline-block; }
@@ -223,7 +247,7 @@
 
     <div id="verify-screen">
         <div class="verify-card">
-            <h2 style="color:var(--brand-blue); margin:0;">SECURITY CHECK</h2>
+            <h2 style="color:var(--primary); margin:0;">SECURITY CHECK</h2>
             <p style="color:#64748b; font-size:13px; margin-top:5px;">Protected System Access</p>
             
             <input type="password" id="accessKey" class="verify-input" placeholder="Enter Verification Key">
@@ -237,21 +261,24 @@
             <div class="brand-container">
                 <div class="nav-logo">GOLDNORA</div>
                 <div class="nav-sub-logo">JEWELLERS</div>
+            </div>
+            
+            <div style="display:flex; flex-direction:column; align-items:flex-end; margin-left: auto;">
                 <div class="nav-details">
                     UMARAHA BAJAR, VARANASI<br>
                     9935629013, 9369268117
                 </div>
-            </div>
-            
-            <div style="display:flex; align-items:center;">
-                <div class="live-clock" id="clockDisplay"><span>📅 --/--/----</span> <span>⏰ --:--</span></div>
-                <div>
-                    <button class="three-dot-btn" onclick="toggleMenu()">&#8942;</button>
-                    <div class="dropdown-menu" id="mainMenu">
-                        <button onclick="switchView('home')">🏠 New Bill</button>
-                        <button onclick="switchView('history')">📊 History</button>
-                        <button onclick="switchView('settings')">⚙️ Settings</button>
-                        <button onclick="resetForm()" style="color:red;">✨ Clear Form</button>
+                <div style="display:flex; align-items:center;">
+                    <div class="live-clock" id="clockDisplay"><span>📅 --/--/----</span> <span>⏰ --:--</span></div>
+                    <div>
+                        <button class="three-dot-btn" onclick="toggleMenu()">&#8942;</button>
+                        <button class="btn-logout" onclick="logout()">LOGOUT</button>
+                        <div class="dropdown-menu" id="mainMenu">
+                            <button onclick="switchView('home')">🏠 New Bill</button>
+                            <button onclick="switchView('history')">📊 History</button>
+                            <button onclick="switchView('settings')">⚙️ Settings</button>
+                            <button onclick="resetForm()" style="color:red;">✨ Clear Form</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -431,7 +458,6 @@
         const VALID_KEY = "VERTGN912ACT";
         
         function initSystem() {
-            // Check if already verified on this device
             const verified = localStorage.getItem('goldnora_access_granted');
             
             if(verified === 'true') {
@@ -447,29 +473,34 @@
             const input = document.getElementById('accessKey').value.trim();
             const msg = document.getElementById('verifyMsg');
             
-            // SIMULATED DEVICE LIMIT (Client-side only implementation)
             let deviceCount = parseInt(localStorage.getItem('gn_device_count') || "0");
             
-            if (deviceCount >= 2) {
-                msg.innerText = "🚫 Max device limit reached";
+            if (deviceCount >= 1) { 
+                msg.innerText = "🚫 Max device limit reached (1 Allowed)";
                 msg.style.display = "block";
                 return;
             }
 
             if (input === VALID_KEY) {
-                // Success
                 localStorage.setItem('goldnora_access_granted', 'true');
-                
-                // Increment dummy counter
                 localStorage.setItem('gn_device_count', (deviceCount + 1).toString());
-                
                 document.getElementById('verify-screen').style.display = 'none';
                 document.getElementById('app-content').style.display = 'block';
                 initialize();
             } else {
-                // Fail
                 msg.innerText = "❌ Galat verification key";
                 msg.style.display = "block";
+            }
+        }
+
+        function logout() {
+            if(confirm("Are you sure you want to logout?")) {
+                localStorage.removeItem('goldnora_access_granted');
+                let deviceCount = parseInt(localStorage.getItem('gn_device_count') || "1");
+                if (deviceCount > 0) {
+                    localStorage.setItem('gn_device_count', (deviceCount - 1).toString());
+                }
+                location.reload();
             }
         }
 
@@ -485,7 +516,6 @@
             loadSavedBills();
         }
 
-        // Run Verification Init immediately
         window.onload = initSystem;
 
         function toggleMenu() { document.getElementById('mainMenu').classList.toggle('show'); }
@@ -665,7 +695,6 @@
             }
 
             try {
-                // NOTE: Shop Name is now Hardcoded in HTML per Branding Requirements
                 
                 ['custName','custMobile','custAddr','invNo','date'].forEach(k => document.getElementById('p-'+k).innerText = data[k==='invNo'?'inv':(k==='date'?'date':k==='custName'?'cust':k==='custMobile'?'mob':'addr')]);
 
