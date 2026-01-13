@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jewellery Retail Pro - GOLD NORA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -13,47 +13,46 @@
         /* --- STYLES --- */
         :root { --primary: #0f172a; --secondary: #334155; --accent: #d97706; --silver: #64748b; --success: #15803d; --danger: #b91c1c; --bg: #f1f5f9; --card-bg: #ffffff; --border: #e2e8f0; }
         
-        /* BRAND COLORS - UPDATED FOR WHITE HEADER */
+        /* BRAND COLORS */
         :root { --brand-blue: #ffffff; --brand-gold: #000000; --brand-white: #000000; }
 
         body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--secondary); padding-top: 100px; }
         
-        /* UPDATED NAVBAR: WHITE BG, NO SHADOW, BORDER ONLY */
         .navbar { 
             position: fixed; top: 0; left: 0; width: 100%; height: auto; min-height: 85px; 
             background: #ffffff; 
             border-bottom: 1px solid #e2e8f0; 
             display: flex; align-items: center; justify-content: space-between; 
-            /* CHANGE: Reduced side padding to 15px for screen corner alignment */
             padding: 10px 15px; box-sizing: border-box; z-index: 1000; 
             box-shadow: none; 
         }
         
-        /* CHANGE 1: LEFT ALIGNMENT ENFORCED */
         .brand-container {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start; /* STRICT LEFT ALIGNMENT */
+            align-items: flex-start; 
             text-align: left; 
-            margin-right: auto; /* Force push to Left Edge */
+            margin-right: auto; 
         }
+        
+        /* --- CHANGE 1: UPDATED LOGO STYLES (PHOTO MATCH) --- */
         .nav-logo { 
             font-family: 'Inter', sans-serif; 
-            font-size: 28px; 
-            font-weight: 300; 
+            font-size: 34px; /* INCREASED SIZE */
+            font-weight: 800; /* INCREASED WEIGHT (BOLD) */
             color: #000000; 
             text-transform: uppercase;
             letter-spacing: 1px;
             line-height: 1;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .nav-sub-logo {
             font-family: 'Inter', sans-serif; 
-            font-size: 13px;
-            font-weight: 400;
+            font-size: 11px;
+            font-weight: 600; /* MEDIUM BOLD */
             color: #000000;
-            letter-spacing: 3px;
+            letter-spacing: 5px; /* WIDER SPACING */
             text-transform: uppercase;
             margin-bottom: 0;
             border-top: 1px solid #000; 
@@ -63,13 +62,12 @@
             width: fit-content;
         }
         
-        /* CHANGE 2: RIGHT ALIGNMENT ENFORCED */
         .nav-details {
             font-family: 'Inter', sans-serif;
             font-size: 11px;
             color: #334155;
             line-height: 1.4;
-            text-align: right; /* STRICT RIGHT ALIGNMENT */
+            text-align: right; 
             margin-bottom: 5px;
         }
 
@@ -140,48 +138,64 @@
         .btn-primary { background: var(--primary); color: white; flex: 2; font-size: 14px; }
         .btn-copy { background: #dcfce7; color: #166534; flex: 1; border: 1px solid #86efac; font-size: 14px; }
 
-        /* PRINT STYLES */
+        /* --- CHANGE 2: UPDATED PRINT STYLES (ESTIMATE HEADER MATCH) --- */
         #print-area { position: fixed; top: -10000px; left: 0; width: 210mm; min-height: 297mm; background: white; color: #000; font-family: 'Times New Roman', serif; padding: 15mm; box-sizing: border-box; display:flex; flex-direction: column; justify-content: space-between; }
         .p-content { flex: 1; }
         
         .p-brand-box {
             background-color: #fff; 
             color: #000;
-            padding: 20px;
-            border-bottom: 2px solid #000;
-            text-align: center;
-            margin-bottom: 25px;
-            border: none;
+            padding: 10px 20px 15px 20px;
+            border-bottom: 1px solid #000;
+            margin-bottom: 15px;
+            display: flex; /* FLEX LAYOUT FOR HEADER */
+            justify-content: space-between;
+            align-items: flex-end; /* Bottom Align */
+            position: relative;
         }
         .p-shop-title {
             font-family: 'Inter', sans-serif !important; 
-            font-size: 32px;
-            font-weight: 300;
+            font-size: 30px; /* Large */
+            font-weight: 700; /* Bold */
             color: #000;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             text-transform: uppercase;
             line-height: 1;
         }
         .p-shop-sub {
             font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            letter-spacing: 5px;
+            font-size: 12px;
+            letter-spacing: 4px;
             color: #000;
-            margin: 5px 0 10px 0;
+            margin: 2px 0 0 2px;
             text-transform: uppercase;
-            border-top:1px solid #000; border-bottom:1px solid #000;
-            display:inline-block;
+            font-weight: 500;
+            display:block;
+            border: none; /* No Border in Print */
+        }
+        /* Centered ESTIMATE Text */
+        .p-center-est {
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -10%);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
         .p-shop-details {
             font-family: 'Inter', sans-serif;
-            font-size: 12px;
-            color: #333;
-            padding-top: 8px;
-            display: inline-block;
-            width: 80%;
+            font-size: 11px;
+            color: #000;
+            text-align: right; /* Right Aligned */
+            line-height: 1.4;
+            width: auto;
+            border: none;
+            padding: 0;
         }
 
-        .p-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; margin-bottom: 20px; }
+        .p-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px; margin-bottom: 20px; border: 1px solid #000; border-radius: 4px; }
         
         .p-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
         .p-table th { border: 1px solid #000; padding: 6px; background: #f0f0f0; font-weight: bold; text-align: center; }
@@ -232,7 +246,7 @@
             .navbar { flex-direction: column; align-items: flex-start; padding: 15px; }
             .brand-container { text-align: left; margin-bottom: 10px; width: 100%; }
             .nav-details { text-align: left; width: 100%; margin-bottom: 10px; }
-            .nav-logo { font-size: 24px; }
+            .nav-logo { font-size: 28px; }
             
             .dropdown-menu { top: 130px; }
             
@@ -399,15 +413,20 @@
     <div id="print-area">
         <div class="p-content">
             <div class="p-brand-box">
-                <div class="p-shop-title">GOLDNORA</div>
-                <div class="p-shop-sub">JEWELLERS</div>
+                <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                    <div class="p-shop-title">GOLDNORA</div>
+                    <div class="p-shop-sub">JEWELLERS</div>
+                </div>
+                
+                <div class="p-center-est">ESTIMATE</div>
+
                 <div class="p-shop-details">
                     UMARAHA BAJAR, VARANASI<br>
                     9935629013, 9369268117
                 </div>
             </div>
 
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px; border:1px solid #000; padding:10px;">
+            <div class="p-header">
                 <div style="font-size:14px;"><strong>Billed To:</strong><br><span id="p-custName"></span><br><span id="p-custMobile"></span><br><span id="p-custAddr"></span></div>
                 <div style="font-size:14px; text-align:right;"><strong>Inv: </strong> <span id="p-invNo"></span><br><strong>Date: </strong> <span id="p-date"></span></div>
             </div>
